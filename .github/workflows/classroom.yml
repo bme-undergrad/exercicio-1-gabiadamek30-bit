@@ -1,0 +1,56 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test1
+      id: test1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test1
+        setup-command: sudo apt update && sudo apt install octave
+        command: octave --eval "tr = exercicio1(@(t) sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-1,
+          @(t) (9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2), 0); assert(tr,
+          0.0283, 0.01)"
+        timeout: 10
+        max-score: 1
+    - name: test2
+      id: test2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test2
+        setup-command: sudo apt update && sudo apt install octave
+        command: octave --eval "tr = exercicio1(@(t) sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-5,
+          @(t) (9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2), 0); assert(tr,
+          0.1463, 0.01)"
+        timeout: 10
+        max-score: 1
+    - name: test3
+      id: test3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test3
+        setup-command: sudo apt update && sudo apt install octave
+        command: octave --eval "tr = exercicio1(@(t) sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-10,
+          @(t) (9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2), 0); assert(tr,
+          0.330, 0.01)"
+        timeout: 10
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST1_RESULTS: "${{steps.test1.outputs.result}}"
+        TEST2_RESULTS: "${{steps.test2.outputs.result}}"
+        TEST3_RESULTS: "${{steps.test3.outputs.result}}"
+      with:
+        runners: test1,test2,test3
