@@ -7,18 +7,18 @@ imax = 20;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-t_roots = zeros(imax,1);
-t_roots(1)= x0;
-erro = zeros(length(t_roots),1);
+t = zeros(imax,1);
+t(1)= x0;
+erro = zeros(length(t),1);
 
 for ii = 1:length(t_roots)-1
     if ii ~= 1
-      erro(ii) = abs((t_roots(ii)-t_roots(ii-1))/t_roots(ii));
+      erro(ii) = abs((t(ii)-t(ii-1))/t(ii));
         if erro(ii)<es
             break
         endif
     endif
-    t_roots(ii+1) = t_roots(ii) - func(t_roots(ii))/func_d(t_roots(ii));
+    t(ii+1) = t(ii) - func(t(ii))/func_d(t(ii));
 endfor
 t=t(ii)
 
