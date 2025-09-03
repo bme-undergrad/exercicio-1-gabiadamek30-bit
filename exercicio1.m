@@ -11,7 +11,7 @@ t = zeros(imax,1);
 t(1)= x0;
 erro = zeros(length(t),1);
 
-for ii = 1:length(t_roots)-1
+for ii = 1:length(t)-1
     if ii ~= 1
       erro(ii) = abs((t(ii)-t(ii-1))/t(ii));
         if erro(ii)<es
